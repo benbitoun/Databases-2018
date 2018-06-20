@@ -1,0 +1,133 @@
+Benjamin Bitoun
+May 27th 2018
+HOMEWORK-02-part1: Warm-UP Queries
+
+1) Find the top 10 countries by GDP using: SELECT -- FROM -- ORDER BY -- LIMIT --
+
+SELECT country.name, gdp FROM economy JOIN country ON country.code = country ORDER BY gdp DESC NULLS LAST LIMIT 10;
+      name      |   gdp    
+----------------+----------
+ United States  | 16720000
+ China          |  9330000
+ Japan          |  5007000
+ Germany        |  3593000
+ France         |  2739000
+ United Kingdom |  2490000
+ Brazil         |  2190000
+ Russia         |  2113000
+ Italy          |  2068000
+ Canada         |  1825000
+(10 rows)
+
+2) Get a list of countries with the GDP below 20000 using: SELECT -- FROM -- WHERE --
+
+SELECT country.name FROM economy JOIN country ON country.code = country WHERE gdp < 20000;
+               name               
+----------------------------------
+ Albania
+ Macedonia
+ Montenegro
+ Kosovo
+ Andorra
+ Liechtenstein
+ Bosnia and Herzegovina
+ Faroe Islands
+ Monaco
+ Gibraltar
+ Guernsey
+ Iceland
+ San Marino
+ Jersey
+ Malta
+ Isle of Man
+ Moldova
+ Tajikistan
+ Armenia
+ Georgia
+ Bhutan
+:
+
+3) Get a list of countries sorted by the highest rates inflation: SELECT -- FROM -- ORDER BY --
+SELECT country.name FROM economy JOIN country ON country.code = country ORDER BY inflation DESC;
+               name               
+----------------------------------
+ Saint Martin
+ Ceuta
+ Reunion
+ Mayotte
+ Holy See
+ American Samoa
+ Somalia
+ Cocos Islands
+ Norfolk Island
+ Christmas Island
+ Pitcairn
+ Svalbard
+ Tokelau
+ Saint Helena
+ Saint Barthelemy
+ North Korea
+ Western Sahara
+ Melilla
+ Syria
+ Venezuela
+ Iran
+
+4) List all countries with the majority of their GDP coming from agriculture: SELECT -- FROM -- WHERE --
+SELECT country.name, agriculture FROM economy JOIN country ON country.code = country WHERE agriculture >= 50 ORDER BY agriculture DESC;
+           name           | agriculture 
+--------------------------+-------------
+ Falkland Islands         |          95
+ Liberia                  |        76.9
+ Somalia                  |        59.3
+ Guinea-Bissau            |          58
+ Central African Republic |        56.6
+ Comoros                  |          51
+ Solomon Islands          |          50
+(7 rows)
+
+5) Create a list of countries in order of highest unemployment, and join the table with the country table so you get the names of the countries not the country code: SELECT -- FROM -- JOIN - ON -- ORDER BY --
+
+SELECT country.name, unemployment FROM economy JOIN country ON country.code = country ORDER BY unemployment DESC NULLS LAST;
+               name               | unemployment 
+----------------------------------+--------------
+ Zimbabwe                         |           95
+ Nauru                            |           90
+ Liberia                          |           85
+ Burkina Faso                     |           77
+ Turkmenistan                     |           60
+ Djibouti                         |           59
+ Congo                            |           53
+ Senegal                          |           48
+ Nepal                            |           46
+ Bosnia and Herzegovina           |         44.3
+ Haiti                            |         40.6
+ Swaziland                        |           40
+ Kenya                            |           40
+ Marshall Islands                 |           36
+ Yemen                            |           35
+ Afghanistan                      |           35
+ Grenada                          |         33.5
+ Kosovo                           |         30.9
+ Cameroon                         |           30
+ Mauritania                       |           30
+ Mali                             |           30
+:
+
+6) Invent your own query for the economy table--as simple or as complicated as you want it to be.
+SELECT country.name, industry, service FROM economy JOIN country ON country.code = country WHERE service > industry ORDER BY service DESC LIMIT 10;
+           name           | industry | service 
+--------------------------+----------+---------
+ Gibraltar                |        0 |     100
+ Jersey                   |        2 |      96
+ Northern Mariana Islands |      3.3 |      95
+ Bermuda                  |      5.7 |    93.5
+ Macao                    |      6.5 |    93.5
+ Hong Kong                |      6.9 |      93
+ Bahamas                  |      7.1 |    90.8
+ Monaco                   |       10 |      90
+ Isle of Man              |       11 |      88
+ Montenegro               |     11.3 |    87.9
+(10 rows)
+
+

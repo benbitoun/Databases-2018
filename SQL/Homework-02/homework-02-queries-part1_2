@@ -1,0 +1,65 @@
+1) Find the top 10 countries by GDP using: SELECT -- FROM -- ORDER BY -- LIMIT --
+
+SELECT country.name, gdp FROM economy JOIN country ON country.code = country ORDER BY gdp DESC NULLS LAST LIMIT 10;
+
+
+2) Get a list of countries with the GDP below 20000 using: SELECT -- FROM -- WHERE --
+
+SELECT country.name FROM economy JOIN country ON country.code = country WHERE gdp < 20000;
+
+
+3) Get a list of countries sorted by the highest rates inflation: SELECT -- FROM -- ORDER BY --
+
+SELECT country.name FROM economy JOIN country ON country.code = country ORDER BY inflation DESC;
+
+4) List all countries with the majority of their GDP coming from agriculture: SELECT -- FROM -- WHERE --
+
+SELECT country.name, agriculture FROM economy JOIN country ON country.code = country WHERE agriculture >= 50 ORDER BY agriculture DESC;
+
+5) Create a list of countries in order of highest unemployment, and join the table with the country table so you get the names of the countries not the country code: SELECT -- FROM -- JOIN - ON -- ORDER BY --
+
+
+To get the country name: 
+SELECT country.name FROM economy JOIN country ON country.code = country;
+SELECT country.name, unemployment FROM economy JOIN country ON country.code = country ORDER BY unemployment DESC NULLS LAST;
+
+6) Invent your own query for the economy table--as simple or as complicated as you want it to be.
+SELECT country.name, industry, service FROM economy JOIN country ON country.code = country WHERE service > industry ORDER BY service DESC LIMIT 10;
+
+HOMEWORK-02-queries-part2
+
+1) Find the top 10 most dominant languages (highest percentage) in their respective countries. This isn't an aggregate query, use ORDER BY along with other stuff.
+SELECT name, country, percentage FROM language ORDER BY percentage DESC LIMIT 10;
+
+
+2) Get a list of the 10 countries with the most languages according to this database. This is an aggregate query. This should have two columns, the country and the number of languages in the country. Hint: you will be using COUNT() and GROUP BY along with other stuff.
+
+SELECT COUNT(country) AS no_languages, country FROM language GROUP BY country ORDER BY no_languages DESC NULLS LAST LIMIT 10;
+
+
+3) Get the same list, but join the country code to the country table so you get the full names of the countries.
+SELECT COUNT(country) AS no_languages, country.name FROM language JOIN country ON country.code = language.country GROUP BY country.name ORDER BY no_languages DESC NULLS LAST LIMIT 10;
+
+
+4) Get a list of the 10 languages that are most commonly found from country to country. This should have two columns, the language and the number of countries it appears in.
+
+SELECT name AS language, COUNT(country) AS no_of_countries FROM language GROUP BY language.name ORDER BY no_of_countries DESC LIMIT 10;
+
+5) Get a list of the 20 languages that are most commonly found from country to country. This is just like the previous query, except it should have a third column that has the average percentage of the population that speaks the language.
+
+SELECT name AS language, COUNT(country) AS no_of_countries, AVG(percentage) FROM language GROUP BY language ORDER BY no_of_countries DESC NULLS LAST LIMIT 20;
+
+
+6) Finally, modify that last query so that you only get languages that are spoken in more than four countries, but order the results by the highest average percentage of speakers. Hint: you need to use HAVING along with other stuff.
+
+SELECT name AS language, COUNT(country) AS no_of_countries, AVG(percentage) FROM language GROUP BY language HAVING COUNT(country) > 4 ORDER BY no_of_countries DESC NULLS LAST LIMIT 20;
+
+
+
+
+
+
+
+
+
+

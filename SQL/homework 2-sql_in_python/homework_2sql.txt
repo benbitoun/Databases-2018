@@ -1,0 +1,136 @@
+
+Homework_2SQL queries
+
+1.)
+
+SELECT country, usage, year
+FROM solar
+WHERE year = 2014
+ORDER BY usage DESC NULLS LAST
+LIMIT 15;
+
+
+2.)
+SELECT country, round(AVG(usage))
+FROM solar
+GROUP BY country
+HAVING AVG(usage)>=500
+ORDER BY AVG(usage) DESC NULLS LAST
+LIMIT 15;
+
+3.)
+SELECT min(year), country
+FROM solar
+GROUP BY country
+HAVING min(year)=2012 #having is the "WHERE" for groups... GROUP BY kontrolliert Reihen nach Duplikaten (etwa Länder wie Algerien) und macht Gruppe daraus.
+ORDER BY country;
+
+4.)
+SELECT solar.country, solar.year, wind.usage, solar.usage
+FROM solar
+JOIN wind ON solar.country = wind.country AND solar.year = wind.year
+WHERE solar.country = 'Germany'
+ORDER BY solar.year; 
+
+5.)
+SELECT solar.country, AVG(wind.usage), AVG(solar.usage)
+FROM solar
+JOIN wind ON solar.country = wind.country
+GROUP BY solar.country
+ORDER BY AVG(solar.usage) DESC
+LIMIT 10;
+
+6.)
+SELECT solar.country, AVG(wind.usage), AVG(solar.usage)
+FROM solar
+JOIN wind ON solar.country = wind.country
+WHERE solar.year >= 2010
+GROUP BY solar.country
+ORDER BY AVG(solar.usage) DESC
+LIMIT 10;
+
+7.)
+SELECT country_data.country, avg(wind.usage) AS avg_wind, avg(solar.usage) AS avg_solar 
+FROM (SELECT wind.country 
+FROM wind
+JOIN solar
+ON wind.country = solar.country AND
+wind.year = solar.year
+GROUP BY wind.country
+HAVING min(wind.year) < 1999 AND min(solar.year) < 1999 ) AS country_data
+RIGHT JOIN solar ON country_data.country = solar.country
+JOIN wind ON country_data.country = wind.country AND wind.year = solar.year
+GROUP BY country_data.country
+ORDER BY avg_solar DESC;
+
+8.)
+SELECT solar.country, min(solar.year), max(solar.year)
+FROM solar
+GROUP BY solar.country
+LIMIT 15;
+
+9.)
+
+10.)SELECT sub.country, (AVG(sub.solar)) AS avgsolar, (AVG(sub.wind)) AS avgwind, (AVG(uranium.usage)) AS avguranium
+FROM (SELECT solar.country, solar.usage AS solar, wind.usage AS wind
+FROM solar
+JOIN wind ON solar.country = wind.country) as sub
+JOIN uranium ON sub.country = uranium.country
+GROUP BY sub.country
+ORDER BY AVG(uranium.usage) DESC
+LIMIT 10;
+
+
+
+Korrekturen
+
+4.) Notation mit . zwischen den columns gibt es nur bei JOIN. Es sagt: "Vom solar table, nimm country, vom solar table nimm year, vom Wwind table nimm usage."
+
+6.)
+
+
+7.)
+a) Make table that just has values from 2000:
+SELECT wind.country, wind.year
+FROM wind
+JOIN solar
+ON wind.country = solar.country AND wind.year = solar.year
+WHERE wind.year = 2000
+AND solar.year = 2000
+
+b) Now we want to get aggregates for the countries. For this make all the first query a subquery.
+
+SELECT wind.country, avg(wind.usage), avg(solar.usage)
+FROM (select wind.country, wind.year
+FROM wind
+JOIN solar
+ON wind.country = solar.country AND wind.year = solar.year
+WHERE wind.year = 2000 AND solar.year =2000) as sub
+
+JOIN wind on wind.country = sub.country
+JOIN solar on solar.country = sub.country
+WHERE wind.year > 1999 AND solar.year > 1999
+GROUP BY wind.country
+ORDER BY avg(solar.usage) desc;
+
+8.)
+SELECT country, min(year) as first_year, max(year) as last_year
+FROM solar
+GROUP BY country
+ORDER BY min(year) LIMIT 15;
+
+9.)
+SELECT sl2.country, first_year,  last_year, sl2.usage first_year_use, sl1.usage last_year_use
+
+FROM (Select max(year) AS last_year, min(year) AS first_year, country
+
+FROM Solar Group by country) AS tseries
+
+JOIN solar AS sl1 ON sl1.year = tseries.last_year AND  sl1.country=tseries.country
+
+JOIN solar AS sl2 on sl2.year = tseries.first_year AND  sl2.country=tseries.country
+
+Order BY last_year_use DESC LIMIT 15;
+
+
+

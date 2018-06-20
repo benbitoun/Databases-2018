@@ -1,0 +1,60 @@
+##################################
+Homework Beatiful Soup Corrections
+##################################
+
+###########
+Shakespeare
+###########
+
+main struggle with bs4 is to see if it’s a list or a string
+
+* Get the setting:
+
+soup_doc.div.strong.get_text() (div searches for the first div, strong for the strong in that div, get_text() does the rest 
+
+* First character:
+
+scene1 = soup_doc.find.all(‚div‘)[1]
+first_character = scene1.strong.string
+print(first_character)
+
+* all characters:
+
+speaches = soup_doc.find_all(‚div‘)[1].find_all(‚ul‘)
+each_character = []
+
+for speaker in speaches:
+	each_character.append(speaker.strong.string) 
+	print(speaker.strong.string) ##.strong gets all of the strongs and .string gets rid of the tags
+
+unique_char_names = set(each_ch) ## to make a proper list out of it: list(set(each_ch))
+
+
+* Now display those same lines without the speaker's name, and no HTML:
+
+lines= soup_doc.find_all(‚div‘)[3].ul.li.find_all(string=True)
+lines
+for line in lines[1:]: ##[1:] is used to start at line 2 in order to get rid of Miranda (first line)
+print(line)
+
+Or:
+mylist= lines.split(‚\n‘)
+mylist
+
+
+############################
+Supreme Court Decisions 2017
+############################
+
+* Isolate the HTML row with the first row of information for the case Washington v. United States:
+
+this_table = soup_doc.find(class=‚table table-bordered‘)
+cells = 
+
+
+* Okay, time to make this useful. Take the information you printed in the last two cells, and combine them all into a list. Output the list, it should look like this:
+
+
+
+
+

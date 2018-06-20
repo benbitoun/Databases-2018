@@ -1,0 +1,31 @@
+1) Find the top 10 countries by GDP using: SELECT -- FROM -- ORDER BY -- LIMIT --
+
+SELECT country.name, gdp FROM economy JOIN country ON country.code = country ORDER BY gdp DESC NULLS LAST LIMIT 10;
+
+SELECT country, MAX(gdp) FROM economy GROUP BY economy.country ORDER BY gdp DESC;
+
+2) Get a list of countries with the GDP below 20000 using: SELECT -- FROM -- WHERE --
+
+SELECT country FROM economy WHERE gdp < 2000;
+
+3) Get a list of countries sorted by the highest rates inflation: SELECT -- FROM -- ORDER BY --
+
+SELECT country FROM economy ORDER BY inflation DESC;
+
+List all countries with the majority of their GDP coming from agriculture: SELECT -- FROM -- WHERE --
+
+SELECT country, gdp, agriculture FROM economy;
+
+SELECT country, gdp, agriculture FROM economy ORDER BY agriculture DESC;
+
+SELECT country.name, gdp, agriculture FROM economy JOIN country ON country.code = country ORDER BY agriculture DESC;
+
+5) Create a list of countries in order of highest unemployment, and join the table with the country table so you get the names of the countries not the country code: SELECT -- FROM -- JOIN - ON -- ORDER BY --
+
+
+To get the country name: 
+SELECT country.name FROM economy JOIN country ON country.code = country;
+SELECT country.name, unemployment FROM economy JOIN country ON country.code = country ORDER BY unemployment DESC;
+
+6) Invent your own query for the economy table--as simple or as complicated as you want it to be.
+SELECT country.name, industry, service FROM economy JOIN country ON country.code = country WHERE service > industry ORDER BY service DESC LIMIT 10;

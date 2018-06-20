@@ -1,0 +1,120 @@
+Benjamin Bitoun
+May 28th 2018
+HOMEWORK-02-queries-part2
+
+1) Find the top 10 most dominant languages (highest percentage) in their respective countries. This isn't an aggregate query, use ORDER BY along with other stuff.
+
+SELECT name, country, percentage FROM language ORDER BY percentage DESC LIMIT 10;
+    name    | country | percentage 
+------------+---------+------------
+ English    | GBM     |        100
+ Portuguese | P       |        100
+ Icelandic  | IS      |        100
+ Italian    | RSM     |        100
+ Russian    | R       |        100
+ German     | FL      |        100
+ Dutch      | NL      |        100
+ German     | D       |        100
+ Polish     | PL      |        100
+ Burmese    | MYA     |        100
+(10 rows)
+
+2) Get a list of the 10 countries with the most languages according to this database. This is an aggregate query. This should have two columns, the country and the number of languages in the country. Hint: you will be using COUNT() and GROUP BY along with other stuff.
+
+SELECT COUNT(country) AS no_languages, country FROM language GROUP BY country ORDER BY no_languages DESC NULLS LAST LIMIT 10;
+ no_languages | country 
+--------------+---------
+            8 | PK
+            7 | IR
+            7 | SF
+            6 | A
+            6 | AUS
+            6 | NLSM
+            6 | MC
+            6 | NZ
+            6 | BZ
+            5 | NMIS
+
+3) Get the same list, but join the country code to the country table so you get the full names of the countries.
+
+SELECT COUNT(country) AS no_languages, country.name FROM language JOIN country ON country.code = language.country GROUP BY country.name ORDER BY no_languages DESC NULLS LAST LIMIT 10;
+ no_languages |     name     
+--------------+--------------
+            8 | Pakistan
+            7 | Finland
+            7 | Iran
+            6 | Austria
+            6 | New Zealand
+            6 | Sint Maarten
+            6 | Australia
+            6 | Monaco
+            6 | Belize
+            5 | Italy
+Question: When I double-checked the result I see that some country moved up or down (Finland, Iran)… But I didn’t change a thing besides the country name instead of the code. How is that possible?
+
+4) Get a list of the 10 languages that are most commonly found from country to country. This should have two columns, the language and the number of countries it appears in.
+
+q
+  language  | no_of_countries 
+------------+-----------------
+ English    |              34
+ Spanish    |              26
+ French     |              17
+ Russian    |              14
+ German     |              11
+ Portuguese |               8
+ Arabic     |               7
+ Serbian    |               6
+ Turkish    |               6
+ Dutch      |               5
+(10 rows)
+
+5) Get a list of the 20 languages that are most commonly found from country to country. This is just like the previous query, except it should have a third column that has the average percentage of the population that speaks the language.
+
+SELECT name AS language, COUNT(country) AS no_of_countries, AVG(percentage) FROM language GROUP BY language ORDER BY no_of_countries DESC NULLS LAST LIMIT 20;
+  language  | no_of_countries |         avg         
+------------+-----------------+---------------------
+ English    |              34 | 55.2470588235294118
+ Spanish    |              26 | 73.6807692307692308
+ French     |              17 | 42.2647058823529412
+ Russian    |              14 | 23.5857142857142857
+ German     |              11 | 36.1363636363636364
+ Portuguese |               8 | 53.3250000000000000
+ Arabic     |               7 | 42.7857142857142857
+ Serbian    |               6 | 26.8833333333333333
+ Turkish    |               6 | 18.8333333333333333
+ Albanian   |               5 | 44.2600000000000000
+ Hungarian  |               5 | 22.9800000000000000
+ Dutch      |               5 | 34.0400000000000000
+ Italian    |               5 | 45.1200000000000000
+ Roma       |               5 |  1.9400000000000000
+ Greek      |               4 | 44.7000000000000000
+ Armenian   |               3 | 35.4000000000000000
+ Ukrainian  |               3 | 24.0000000000000000
+ Hebrew     |               3 | 31.2000000000000000
+ Croatian   |               3 | 35.2000000000000000
+ Chinese    |               3 | 33.4000000000000000
+(20 rows)
+
+6) Finally, modify that last query so that you only get languages that are spoken in more than four countries, but order the results by the highest average percentage of speakers. Hint: you need to use HAVING along with other stuff.
+
+SELECT name AS language, COUNT(country) AS no_of_countries, AVG(percentage) FROM language GROUP BY language HAVING COUNT(country) > 4 ORDER BY no_of_countries DESC NULLS LAST LIMIT 20;
+  language  | no_of_countries |         avg         
+------------+-----------------+---------------------
+ English    |              34 | 55.2470588235294118
+ Spanish    |              26 | 73.6807692307692308
+ French     |              17 | 42.2647058823529412
+ Russian    |              14 | 23.5857142857142857
+ German     |              11 | 36.1363636363636364
+ Portuguese |               8 | 53.3250000000000000
+ Arabic     |               7 | 42.7857142857142857
+ Turkish    |               6 | 18.8333333333333333
+ Serbian    |               6 | 26.8833333333333333
+ Italian    |               5 | 45.1200000000000000
+ Dutch      |               5 | 34.0400000000000000
+ Roma       |               5 |  1.9400000000000000
+ Albanian   |               5 | 44.2600000000000000
+ Hungarian  |               5 | 22.9800000000000000
+(14 rows)
+
+
